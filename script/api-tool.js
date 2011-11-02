@@ -28,7 +28,8 @@
     	});
     	
     	// handle resource uri link click event
-	    $("a#resourceuri").click(function(){  	  	
+	    $("a#resourceuri").click(function(){ 
+	     $("div#response").empty(); 	  	
   	  	var aurl=get_selected_env_url() + $(this).attr("href");
   	  	$("#iurl").attr("value",aurl);
   	  	
