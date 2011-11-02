@@ -1,0 +1,19 @@
+dl { 
+  padding-bottom: 2px; padding-top: 2px; 
+}
+
+#environment { 
+  width: 165px; 
+}
+#bcontent { 
+  overflow: visible; 
+}
+#iurl { 
+  width:83%; 
+}
+#http_method { 
+  width: 80px; 
+}
+#tblrequest { 
+  padding: 4px;  
+}

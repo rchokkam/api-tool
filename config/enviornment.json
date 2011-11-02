@@ -1,0 +1,6 @@
+{"environments" : 
+  [{"env_name": "dev","env_url":"https://graph.facebook.com"},
+   {"env_name": "uat","env_url":"http://uat:8080"},
+   {"env_name": "test","env_url":"http://test:8080"},
+   {"env_name": "pre-prod","env_url":"http://pre-prod:8080"},
+   {"env_name": "prod","env_url":"http://prod:8080"}]}
