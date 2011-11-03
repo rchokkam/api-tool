@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>API Tool for Kasia 2.0</title> 
+  <meta content="API Tool for Kasia 2.0" name="description">
+  <meta http-equiv="imagetoolbar" content="no" />
+  <meta content="jitendra.takalkar@gmail.com" name="author">
+  <script type="text/javascript" >
+		var lhistory=[];
+		var cur=0;
+	</script>  
+  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
+  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js"></script>
+  <script type="text/javascript" src="script/api-tool.js"></script>
+
+        
+  <link type="text/css" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/themes/ui-lightness/jquery-ui.css" rel="Stylesheet"/>
+  
+	
+	<link rel="stylesheet" href="css/style.css" type="text/css" /> 		
+  <link rel="stylesheet" href="css/markdown.css" type="text/css" /> 	
+	<link rel="stylesheet" href="css/tocLayout.css" type="text/css" />
+  <link rel="stylesheet" href="css/api-tool.css" type="text/css" />
+  
+	<link rel="shortcut icon" href="http://static.jquery.com/favicon.ico" type="image/x-icon"/> 
+</head>
+
+
+<body id="interior"> 
+ 
+	<div id="siteContain"> 
+		<!-- #header --> 			
+		<div id="header"> 
+	   <a id="siteLogo" href="http://yousee.dk" title="YouSee a/s">
+	     <img src="images/yousee_logo_v2.png" alt="YouSee - vi skaber glæde foran skærmen"/>
+	  </a> 
+	  
+	  <h1>API Tool for Kasia 2.0</h1> 
+		</div>
+		<!-- /#header --> 
+
+ 		
+		<div id="content" class="clearfix">
+		  <!-- #interiorNavigation -->
+		  <div id="interiorNavigation"> 
+        <div id="accordion"></div>
+		  </div>
+		  <!-- /#interiorNavigation --> 
+
+ 		<!-- #primaryContent -->
+		<div id="primaryContent">
+		  <div id="column-content"> 
+			 <div id="bcontent" class="content">
+			   <div style="padding:5px;">
+          <input id="iurl" type="text"></input>
+        	<!--select id="http_method">
+          <option value="GET">GET</option>
+          <option value="POST">POST</option>
+          <option value="PUT">PUT</option>
+       		</select-->
+        	<input type="button" id="sbutton" value="Go"/>
+        	<input type="button" id="pbutton" value="Prev"/>
+        	<input type="button" id="nbutton" value="Next"/>
+        	<div style="display:none"><input type="button" id="dbutton" value="d"/></div>
+          </div>
+          
+          <br />
+        	<div id="tabs">
+							 <ul>
+								<li><a id="a-tab-1" href="#tabs-1">Request</a></li>
+								<li><a id="a-tab-2" href="#tabs-2">Response</a></li>
+							 </ul>
+							 <div id="tabs-1">
+								<div id="request"></div>
+							 </div>
+							 <div id="tabs-2">
+								<div id="response"></div>
+							 </div>
+					</div>
+   			</div>
+			</div>
+		</div>
+		<!-- /#primaryContent -->
+		
+		</div>
+		<!-- /#siteContain --> 
+	</body>
+</html>
