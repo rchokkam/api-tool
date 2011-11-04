@@ -1,5 +1,6 @@
 *.*~
 pom.xml
+build.sh
 *jar
 /lib/
 /classes/
