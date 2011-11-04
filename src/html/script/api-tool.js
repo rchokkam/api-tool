@@ -63,8 +63,20 @@ $(function() {
 													str_html += "</td></tr>";
 												}
 											}
+											
+											
+											var rmethod=ruri.substring(ruri.indexOf("{")+1,ruri.indexOf("}"));
+											if(rmethod!=null && (rmethod=="PUT" || rmethod=="POST")){
+												str_html += "<tr><td> Data </td><td>";
+												str_html += "<textarea col=\"80\" rows=\"30\" id=\"rbody\">";
+												str_html += "</textarea></td></tr>";
+											}
 											str_html += "</tbody></table>";
 											$("div#request").html(str_html);
+											
+											if(rmethod!=null && (rmethod=="PUT" || rmethod=="POST")){
+												set_schema(ruri);
+											}
 
 											// view the request tab
 											$("#a-tab-1").trigger('click');
@@ -171,6 +183,24 @@ function generate_uri(preandprod, module, resource) {
 	return ruri;
 }
 
+function set_schema(ruri){
+	$.getJSON("config/kasia2.js",function(data) {
+		var str = "";	
+		var preandpost = data.preandprod;
+		$.each(data.modules, function(i, item) {
+			$.each(item.resources, function(j, resource) {
+				if(ruri == generate_uri(preandpost, item,resource)){
+					if(resource.method == "PUT" || resource.method == "POST"){
+						$.getJSON("config/" + resource.schema + ".js",function(data) {
+							$("textarea#rbody").attr("value",JSON.stringify(data,simple_replacer,2));							
+						})
+					} 
+				}
+			});
+		});		
+	});	
+}
+
 /**
  * Replacer callback function for JSON.stringnify.
  */
@@ -184,6 +214,9 @@ function replacer(key, value) {
 	return value;
 }
 
+function simple_replacer(key, value) {
+	return value;
+}
 /**
  * 
  */

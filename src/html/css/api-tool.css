@@ -22,3 +22,9 @@ dl {
 	color: blue;
 	cursor: pointer;
 }
+#tblrequest {
+  width: 100%;
+}
+#rbody {
+  width: 100%;
+}

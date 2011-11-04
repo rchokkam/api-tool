@@ -1,5 +1,5 @@
 {
-    "preandprod" : ["localhost","preprod","prod"],
+    "preandprod" : ["preprod","prod"],
     "accept" : "application/vnd.yousee.kasia2+json;version=",
     "modules" : [{
         "name" : "Abonnementer",
@@ -153,7 +153,7 @@
             "uri" : "/<id>",
             "method" : "POST",
             "version" : "1",
-            "schema" : "update-customer"
+            "schema" : "kunde-update-customer"
         },
         {
             "label" : "Create customer",
