@@ -10,7 +10,7 @@ $(function() {
 	// generate accordian element dynamically
 	$
 			.getJSON(
-					"config/kasia2.json",
+					"config/kasia2.js",
 					function(data) {
 						var str = "";
 						var preandpost = data.preandprod;
