@@ -1,6 +1,6 @@
 {
     "preandprod" : ["preprod","prod"],
-    "accept" : "application/vnd.yousee.kasia2+json;version=",
+    "accept" : "application/vnd.yousee.kasia2+json;charset=UTF-8",
     "modules" : [{
         "name" : "Abonnementer",
         "context" : "/abonnement",
@@ -143,7 +143,7 @@
             "version" : "1"
         },
         {
-            "label" : "All customers",
+            "label" : "All customers by address",
             "uri" : "/amsid/<id>",
             "method" : "GET",
             "version" : "1"
@@ -160,7 +160,7 @@
             "uri" : "/",
             "method" : "POST",
             "version" : "1",
-            "schema" : "create-customer"
+            "schema" : "kunde-create-customer"
         }]
     },
     {

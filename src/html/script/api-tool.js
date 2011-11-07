@@ -38,7 +38,7 @@ $(function() {
 						$("a#resourceuri")
 								.click(
 										function() {
-											$("div#response").empty();
+											clear_div_content();
 											var aurl = $(this).attr("href");
 											$("#iurl").attr("value", aurl);
 
@@ -64,10 +64,9 @@ $(function() {
 												}
 											}
 											
-											
-											var rmethod=ruri.substring(ruri.indexOf("{")+1,ruri.indexOf("}"));
+											var rmethod=get_method(ruri);
 											if(rmethod!=null && (rmethod=="PUT" || rmethod=="POST")){
-												str_html += "<tr><td> Data </td><td>";
+												str_html += "<tr><td> data </td><td>";
 												str_html += "<textarea col=\"80\" rows=\"30\" id=\"rbody\">";
 												str_html += "</textarea></td></tr>";
 											}
@@ -88,7 +87,7 @@ $(function() {
 	// handle onclick event on sbutton
 	$("input#sbutton").click(
 			function() {
-				$("div#response").empty();
+				clear_div_content();
 				var uri = $("#iurl").val();
 				var tokens = get_ruri_tokens(uri), token = "";
 				for (i = 0; i < tokens.length; i++) {
@@ -98,27 +97,45 @@ $(function() {
 							"value"));
 				}
 
-				var turi = uri.substring((uri.indexOf("}")) + 1);
-				$.getJSON(turi, {
-					"error" : function(errorObject) {
-						$("div#response").html(errorObject);
-					}
-				}, function(data) {
-					lhistory.push(uri);
-					cur = (lhistory.length) - 1;
-					$("div#response").html(
-							"<pre>" + JSON.stringify(data, replacer, 4)
-									+ "</pre>");
-				});
+				//using $.ajax();
+				var turi = uri.substring((uri.indexOf("}")) + 1),
+						rmethod=get_method(uri),
+						rdata=get_request_data();
 
-				// view the
-				$("#a-tab-2").trigger('click');
+				$.ajax({
+					url: "http://localhost:41001" + turi,
+					processData:false,
+					type: rmethod,
+					data: rdata,
+					beforeSend:function(jqXHR, settings){
+						jqXHR.setRequestHeader("Accept", "application/vnd.yousee.kasia2+json;charset=UTF-8");
+    				jqXHR.setRequestHeader("Content-type", "application/vnd.yousee.kasia2+json;charset=UTF-8");
+    				render_request_header(jqXHR);
+					},
+					success: function(data, textStatus, jqXHR){
+						if(rmethod=="GET"){
+							lhistory.push(uri);
+							cur = (lhistory.length) - 1;
+						}
+						$("div#response").empty().html("<pre>" + JSON.stringify(data, replacer, 4)
+									+ "</pre>");
+						render_response_header(jqXHR);
+						//$("div#reqheader").empty().html(prettyPrint(jqXHR,{maxDepth: 1}));
+						// view the
+						$("#a-tab-2").trigger('click');
+					},
+					error: function(jqXHR, textStatus, errorThrown){
+						//$("div#reqheader").empty().html(prettyPrint(jqXHR,{maxDepth: 1}));
+						render_response_header(jqXHR);
+						$("#a-tab-4").trigger('click');
+					}						
+				});
 			});
 
 	// handle dummy button event
 	$("input#dbutton").click(
 			function() {
-				$("div#response").empty();
+				clear_div_content();
 				var uri = $("#iurl").val();
 				var tokens = get_ruri_tokens(uri), token = "";
 				for (i = 0; i < tokens.length; i++) {
@@ -129,11 +146,7 @@ $(function() {
 				}
 
 				uri = uri.substring((uri.indexOf("}")) + 1);
-				$.getJSON(uri, {
-					"error" : function(errorObject) {
-						$("div#response").html(errorObject);
-					}
-				}, function(data) {
+				$.getJSON(uri, function(data) {
 					$("div#response").html(
 							"<pre>" + JSON.stringify(data, replacer, 4)
 									+ "</pre>");
@@ -152,7 +165,6 @@ $(function() {
 		} else {
 			alert("no next");
 		}
-
 	});
 
 	// handle onclick event for next button
@@ -168,14 +180,55 @@ $(function() {
 
 });
 
+
+/**
+ * clear request header,response header and response.
+ */
+var clear_div_content=function(){
+	$("div#response").empty();
+	$("div#reqheader").empty();
+	$("div#resheader").empty();
+};
+/**
+ * render request header.
+ */
+var render_request_header=function(jqXHR){
+	var str = "<table style=\"width:100%\"><tbody>";
+	//str += "<tr><td>test</td><td>test</td></tr>";
+	str += "</tbody></table>";
+	$("div#reqheader").empty().html(str);
+};
+/**
+ * render response header.
+ */
+var render_response_header=function(jqXHR){
+	var str = "<table style=\"width:100%\"><tbody>";
+	str += "<tr><td>Ready State</td><td>" + jqXHR.readyState + "</td></tr>";
+	//str += "<tr><td>Response Text</td><td>" + jqXHR.responseText + "</td></tr>";
+	str += "<tr><td>Status</td><td>" + jqXHR.status + "</td></tr>";
+	str += "<tr><td>Status Text</td><td>" + jqXHR.statusText + "</td></tr>";
+	str += "</tbody></table>";
+	$("div#resheader").empty().html(str);
+};
+/**
+ * return request data.
+ */
+var get_request_data=function(){
+	var rdata=$("textarea#rbody").attr("value");
+	if(rdata==null){
+		rdata="";
+	}
+	rdata=rdata.replace(new RegExp("\\n", "g" ),"");
+	rdata=rdata.replace(new RegExp("\\r", "g" ),"");
+	return JSON.stringify(rdata);
+};
 /**
  * based on the environment build the context of uri dynamically.
  */
-function generate_uri(preandprod, module, resource) {
+var generate_uri=function(preandprod, module, resource) {
 	var hosts = preandprod.toString();
 	var ruri = "{" + resource.method + "}" + module.context;
 	if (hosts.match(location.hostname) != null) { // preprod and production
-													// environment
 		ruri += resource.uri;
 	} else { // other than preprod and production environment
 		ruri += "-v" + resource.version + resource.uri;
@@ -183,7 +236,7 @@ function generate_uri(preandprod, module, resource) {
 	return ruri;
 }
 
-function set_schema(ruri){
+var set_schema=function(ruri){
 	$.getJSON("config/kasia2.js",function(data) {
 		var str = "";	
 		var preandpost = data.preandprod;
@@ -199,12 +252,11 @@ function set_schema(ruri){
 			});
 		});		
 	});	
-}
-
+};
 /**
  * Replacer callback function for JSON.stringnify.
  */
-function replacer(key, value) {
+var replacer=function(key, value) {
 	if (key != null && key == "href") {
 		var urlStart = location.protocol + "//" + location.host;
 		var avalue = value.replace(urlStart, "");
@@ -212,23 +264,25 @@ function replacer(key, value) {
 				+ "</span>";
 	}
 	return value;
-}
-
-function simple_replacer(key, value) {
-	return value;
-}
+};
 /**
  * 
  */
-function nested_call(rspan) {
+var simple_replacer=function(key, value) {
+	return value;
+};
+/**
+ * 
+ */
+var nested_call=function(rspan) {
 	$("#iurl").attr("value", $(rspan).text());
 	$("input#sbutton").trigger('click');
-}
+};
 
 /**
  * This function returns token by parsing the uri based on <token> pattern.
  */
-function get_ruri_tokens(ruri) {
+var get_ruri_tokens=function(ruri) {
 	var tokens = ruri.split("/");
 	var iparams = [];
 	for (i = 0; i < tokens.length; i++) {
@@ -239,4 +293,15 @@ function get_ruri_tokens(ruri) {
 		}
 	}
 	return iparams;
-}
+};
+/**
+ * Default method return 'GET'
+ */
+var get_method=function(ruri){
+	var rmethod=ruri.substring(ruri.indexOf("{")+1,ruri.indexOf("}"));
+	rmethod=rmethod.toUpperCase();
+	if((rmethod == "POST") || (rmethod == "PUT") || (rmethod == "DELETE")){
+		return rmethod;
+	}	
+	return "GET";  
+};
