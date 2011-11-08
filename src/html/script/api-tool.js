@@ -7,6 +7,10 @@ $(function() {
 		$('div#browser_resize').text($(window).width());
 	});
 
+	//Both buttons are disable at the of loading the page
+	$("input#nbutton").attr("disabled", true);
+	$("input#pbutton").attr("disabled", true);
+
 	// generate accordian element dynamically
 	$
 			.getJSON(
@@ -63,7 +67,7 @@ $(function() {
 													str_html += "</td></tr>";
 												}
 											}
-											
+
 											var rmethod=get_method(ruri);
 											if(rmethod!=null && (rmethod=="PUT" || rmethod=="POST")){
 												str_html += "<tr><td> data </td><td>";
@@ -72,7 +76,7 @@ $(function() {
 											}
 											str_html += "</tbody></table>";
 											$("div#request").html(str_html);
-											
+
 											if(rmethod!=null && (rmethod=="PUT" || rmethod=="POST")){
 												set_schema(ruri);
 											}
@@ -103,13 +107,13 @@ $(function() {
 						rdata=get_request_data();
 
 				$.ajax({
-					url: "http://localhost:41001" + turi,
+					url: turi,
 					processData:false,
 					type: rmethod,
 					data: rdata,
 					beforeSend:function(jqXHR, settings){
 						jqXHR.setRequestHeader("Accept", "application/vnd.yousee.kasia2+json;charset=UTF-8");
-    				jqXHR.setRequestHeader("Content-type", "application/vnd.yousee.kasia2+json;charset=UTF-8");
+    				jqXHR.setRequestHeader("Content-Type", "application/vnd.yousee.kasia2+json;charset=UTF-8");
     				render_request_header(jqXHR);
 					},
 					success: function(data, textStatus, jqXHR){
@@ -117,16 +121,24 @@ $(function() {
 							lhistory.push(uri);
 							cur = (lhistory.length) - 1;
 						}
-						$("div#response").empty().html("<pre>" + JSON.stringify(data, replacer, 4)
+						$("div#response").empty().html("<pre id=\"rspre\">" + JSON.stringify(data, replacer, 4)
 									+ "</pre>");
-						render_response_header(jqXHR);
+						render_response_header(jqXHR,false);
 						//$("div#reqheader").empty().html(prettyPrint(jqXHR,{maxDepth: 1}));
 						// view the
 						$("#a-tab-2").trigger('click');
+						if(($("pre#rspre").height())>650){
+							$("pre#rspre").height(650);
+						}
+						$("input#nbutton").attr("disabled", true);
+						$("input#nbutton").empty();
+						if(lhistory.length>1){
+							$("input#pbutton").removeAttr("disabled");
+						}						
 					},
 					error: function(jqXHR, textStatus, errorThrown){
 						//$("div#reqheader").empty().html(prettyPrint(jqXHR,{maxDepth: 1}));
-						render_response_header(jqXHR);
+						render_response_header(jqXHR,true);
 						$("#a-tab-4").trigger('click');
 					}						
 				});
@@ -148,13 +160,25 @@ $(function() {
 				uri = uri.substring((uri.indexOf("}")) + 1);
 				$.getJSON(uri, function(data) {
 					$("div#response").html(
-							"<pre>" + JSON.stringify(data, replacer, 4)
+							"<pre id=\"rspre\">" + JSON.stringify(data, replacer, 4)
 									+ "</pre>");
+				  if(($("pre#rspre").height())>650){
+					  $("pre#rspre").height(650);
+				  }
 				});
 
 				// view the
-				$("#a-tab-2").trigger('click');
+				$("#a-tab-2").trigger('click');				
 			});
+
+	// handle enter key for request
+	$("#request").keypress(function(e) {
+        	if(e.which == 13) {
+            		jQuery(this).blur();
+            		jQuery('input#sbutton').focus().click();
+        	}
+		$("input#pbutton").attr("disabled", true);
+	});
 
 	// handle onclick event for prev button
 	$("input#nbutton").click(function() {
@@ -162,8 +186,12 @@ $(function() {
 			cur += 1;
 			$("#iurl").attr("value", lhistory[cur]);
 			$("input#dbutton").trigger('click');
+			$("input#pbutton").removeAttr("disabled");
+				if(cur == (lhistory.length) - 1) {
+					$("input#nbutton").attr("disabled", true);
+				}
 		} else {
-			alert("no next");
+			$("input#nbutton").attr("disabled", true);
 		}
 	});
 
@@ -173,8 +201,12 @@ $(function() {
 			cur -= 1;
 			$("#iurl").attr("value", lhistory[cur]);
 			$("input#dbutton").trigger('click');
+			$("input#nbutton").removeAttr("disabled");
+				if(cur == 0) {
+					$("input#pbutton").attr("disabled", true);
+				}
 		} else {
-			alert("no prev");
+			$("input#pbutton").attr("disabled", true);
 		}
 	});
 
@@ -201,12 +233,15 @@ var render_request_header=function(jqXHR){
 /**
  * render response header.
  */
-var render_response_header=function(jqXHR){
+var render_response_header=function(jqXHR,error){
 	var str = "<table style=\"width:100%\"><tbody>";
-	str += "<tr><td>Ready State</td><td>" + jqXHR.readyState + "</td></tr>";
+	str += "<tr><td width=\"30%\">Ready State</td><td>" + jqXHR.readyState + "</td></tr>";
 	//str += "<tr><td>Response Text</td><td>" + jqXHR.responseText + "</td></tr>";
 	str += "<tr><td>Status</td><td>" + jqXHR.status + "</td></tr>";
 	str += "<tr><td>Status Text</td><td>" + jqXHR.statusText + "</td></tr>";
+	if(error){
+		str += "<tr><td>Response Text</td><td><pre>" + JSON.stringify(jqXHR.responseText, simple_replacer, 4) + "</pre></td></tr>";
+	}
 	str += "</tbody></table>";
 	$("div#resheader").empty().html(str);
 };
