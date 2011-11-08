@@ -59,10 +59,10 @@ $(function() {
 																.charAt((token.length) - 1) == '>') {
 													token = token.substr(1,
 															token.length - 2);
-													str_html += "<tr><td>";
+													str_html += "<tr><td width=\"100px\">";
 													str_html += token
 															+ "</td><td>";
-													str_html += "<input type=\"text\" id=\""
+													str_html += "<input type=\"text\" class=\"rdatatext\" id=\""
 															+ token + "\"/>"
 													str_html += "</td></tr>";
 												}
@@ -71,7 +71,7 @@ $(function() {
 											var rmethod=get_method(ruri);
 											if(rmethod!=null && (rmethod=="PUT" || rmethod=="POST")){
 												str_html += "<tr><td> data </td><td>";
-												str_html += "<textarea col=\"80\" rows=\"30\" id=\"rbody\">";
+												str_html += "<textarea col=\"80\" rows=\"25\" id=\"rbody\">";
 												str_html += "</textarea></td></tr>";
 											}
 											str_html += "</tbody></table>";
@@ -85,9 +85,8 @@ $(function() {
 											$("#a-tab-1").trigger('click');
 											return false;
 										});
-
 					});
-
+					
 	// handle onclick event on sbutton
 	$("input#sbutton").click(
 			function() {
@@ -136,7 +135,6 @@ $(function() {
 						}						
 					},
 					error: function(jqXHR, textStatus, errorThrown){
-						//$("div#reqheader").empty().html(prettyPrint(jqXHR,{maxDepth: 1}));
 						render_response_header(jqXHR,true);
 						$("#a-tab-4").trigger('click');
 					}						
@@ -167,15 +165,19 @@ $(function() {
 				});
 
 				// view the
-				$("#a-tab-2").trigger('click');				
+				if(data==null || data == ""){
+					$("#a-tab-4").trigger('click');
+				}else{
+					$("#a-tab-2").trigger('click');
+				}				
 			});
 
 	// handle enter key for request
 	$("#request").keypress(function(e) {
-        	if(e.which == 13) {
-            		jQuery(this).blur();
-            		jQuery('input#sbutton').focus().click();
-        	}
+		if(e.which == 13) {
+    	jQuery(this).blur();
+      jQuery('input#sbutton').focus().click();
+    }
 		$("input#pbutton").attr("disabled", true);
 	});
 
@@ -233,7 +235,7 @@ var render_request_header=function(jqXHR){
  * render response header.
  */
 var render_response_header=function(jqXHR,error){
-	var str = "<table style=\"width:100%\"><tbody>";
+	var str = "<table style=\"width:100%\" cellspacing=\"0\"><tbody>";
 	str += "<tr><td width=\"30%\">Ready State</td><td>" + jqXHR.readyState + "</td></tr>";
 	//str += "<tr><td>Response Text</td><td>" + jqXHR.responseText + "</td></tr>";
 	str += "<tr><td>Status</td><td>" + jqXHR.status + "</td></tr>";

@@ -28,3 +28,7 @@ dl {
 	color: blue;
 	cursor: pointer;
 }
+
+.rdatatext {
+	width: 70%;
+}
