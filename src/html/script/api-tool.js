@@ -104,7 +104,7 @@ $(function() {
 				//using $.ajax();
 				var turi = uri.substring((uri.indexOf("}")) + 1),
 						rmethod=get_method(uri),
-						rdata=get_request_data();
+						rdata=$.parseJSON(get_request_data());
 
 				$.ajax({
 					url: turi,
@@ -124,7 +124,6 @@ $(function() {
 						$("div#response").empty().html("<pre id=\"rspre\">" + JSON.stringify(data, replacer, 4)
 									+ "</pre>");
 						render_response_header(jqXHR,false);
-						//$("div#reqheader").empty().html(prettyPrint(jqXHR,{maxDepth: 1}));
 						// view the
 						$("#a-tab-2").trigger('click');
 						if(($("pre#rspre").height())>650){
@@ -252,9 +251,10 @@ var get_request_data=function(){
 	var rdata=$("textarea#rbody").attr("value");
 	if(rdata==null){
 		rdata="";
+	} else {
+		rdata=rdata.replace(new RegExp("\\n", "g" ),"");
+		rdata=rdata.replace(new RegExp("\\r", "g" ),"");
 	}
-	rdata=rdata.replace(new RegExp("\\n", "g" ),"");
-	rdata=rdata.replace(new RegExp("\\r", "g" ),"");
 	return JSON.stringify(rdata);
 };
 /**
