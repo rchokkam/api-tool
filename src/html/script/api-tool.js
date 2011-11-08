@@ -53,10 +53,13 @@ $(function() {
 											var str_html = "<table id=\"tblrequest\" cellpadding=\"5\" cellspacing=\"5\"><tbody>";
 											for (i = 0; i < tokens.length; i++) {
 												var token = tokens[i];
-												if (token.length > 1
-														&& token.charAt(0) == '<'
+												if (token.length > 1 && 
+														((token.charAt(0) == '<'
 														&& token
-																.charAt((token.length) - 1) == '>') {
+																.charAt((token.length) - 1) == '>') ||
+														(token.charAt(0) == '['
+														&& token
+																.charAt((token.length) - 1) == ']'))) {
 													token = token.substr(1,
 															token.length - 2);
 													str_html += "<tr><td width=\"100px\">";
@@ -99,6 +102,7 @@ $(function() {
 							"input#" + token.substr(1, token.length - 2)).attr(
 							"value"));
 				}
+				uri=replace_last_slash(uri);
 
 				//using $.ajax();
 				var turi = uri.substring((uri.indexOf("}")) + 1),
@@ -124,7 +128,11 @@ $(function() {
 									+ "</pre>");
 						render_response_header(jqXHR,false);
 						// view the
-						$("#a-tab-2").trigger('click');
+						if(data==undefined || data==null || data == ""){
+							$("#a-tab-4").trigger('click');
+						}else{
+							$("#a-tab-2").trigger('click');
+						}	
 						if(($("pre#rspre").height())>650){
 							$("pre#rspre").height(650);
 						}
@@ -162,14 +170,15 @@ $(function() {
 				  if(($("pre#rspre").height())>650){
 					  $("pre#rspre").height(650);
 				  }
+				  
+				  // view the
+					if(data==undefined || data==null || data == ""){
+						$("#a-tab-4").trigger('click');
+					}else{
+						$("#a-tab-2").trigger('click');
+					}		
 				});
-
-				// view the
-				if(data==null || data == ""){
-					$("#a-tab-4").trigger('click');
-				}else{
-					$("#a-tab-2").trigger('click');
-				}				
+	
 			});
 
 	// handle enter key for request
@@ -213,7 +222,15 @@ $(function() {
 
 });
 
-
+/**
+ * recursive function to replace the last slashes.
+ */
+var replace_last_slash=function(ruri){
+	if(ruri.charAt(ruri.length-1)=='/'){
+		return replace_last_slash(ruri.substring(0,ruri.length-1));
+	}
+	return ruri;
+};
 /**
  * clear request header,response header and response.
  */
@@ -235,13 +252,13 @@ var render_request_header=function(jqXHR){
  * render response header.
  */
 var render_response_header=function(jqXHR,error){
-	var str = "<table style=\"width:100%\" cellspacing=\"0\"><tbody>";
-	str += "<tr><td width=\"30%\">Ready State</td><td>" + jqXHR.readyState + "</td></tr>";
+	var str = "<table style=\"width:100%\" cellpadding=\"5\" cellspacing=\"5\"><tbody>";
+	str += "<tr><td width=\"120px\">Ready State</td><td>" + jqXHR.readyState + "</td></tr>";
 	//str += "<tr><td>Response Text</td><td>" + jqXHR.responseText + "</td></tr>";
 	str += "<tr><td>Status</td><td>" + jqXHR.status + "</td></tr>";
 	str += "<tr><td>Status Text</td><td>" + jqXHR.statusText + "</td></tr>";
 	if(error){
-		str += "<tr><td>Response Text</td><td><pre>" + JSON.stringify(jqXHR.responseText, simple_replacer, 4) + "</pre></td></tr>";
+		str += "<tr><td>Response Text</td><td>" + jqXHR.responseText + "</td></tr>";
 	}
 	str += "</tbody></table>";
 	$("div#resheader").empty().html(str);
@@ -324,8 +341,9 @@ var get_ruri_tokens=function(ruri) {
 	var iparams = [];
 	for (i = 0; i < tokens.length; i++) {
 		var token = tokens[i];
-		if (token.length > 1 && token.charAt(0) == '<'
-				&& token.charAt((token.length) - 1) == '>') {
+		if (token.length > 1 && ((token.charAt(0) == '<'
+				&& token.charAt((token.length) - 1) == '>') ||(token.charAt(0) == '['
+				&& token.charAt((token.length) - 1) == ']'))) {
 			iparams.push(token);
 		}
 	}
