@@ -74,7 +74,7 @@ $(function() {
 											}
 															
 											str_html += "<table id=\"tblrequestd\" cellpadding=\"5\" cellspacing=\"5\"><tbody><tr><td width=\"100px\"> headers </td><td>";
-											str_html += "<textarea col=\"80\" rows=\"3\" id=\"rheaders\">";
+											str_html += "<textarea col=\"80\" rows=\"2\" id=\"rheaders\">";
 											str_html += "</textarea></td></tr>";
 											var rmethod=get_method(ruri);
 											if(rmethod!=null && (rmethod=="PUT" || rmethod=="POST")){												
@@ -365,7 +365,6 @@ var nested_call=function(rspan) {
 	$("#iurl").attr("value", $(rspan).text());
 	$("input#sbutton").trigger('click');
 };
-
 /**
  * This function returns token by parsing the uri based on <token> pattern.
  */
