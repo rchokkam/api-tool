@@ -1,8 +1,8 @@
 {
-    "preandprod" : ["localhost","preprod","prod"],
-    "accept" : "application/vnd.yousee.kasia2+json;version=",
+    "preandprod" : ["preprod","prod"],
+    "accept" : "application/vnd.yousee.kasia2+json;charset=UTF-8",
     "modules" : [{
-        "name" : "Abonnementer",
+        "name" : "ABONNEMENT",
         "context" : "/abonnement",
         "resources" : [{
             "label" : "All abonnementer for a Customer",
@@ -36,7 +36,7 @@
         }]
     },
     {
-        "name" : "Address",
+        "name" : "ADRESSE",
         "context" : "/adresse",
         "resources" : [{
             "label" : "Find by zip",
@@ -109,6 +109,12 @@
             "version" : "1"
         },
         {
+            "label" : "Nysalgs prices with mindstepriser",
+            "uri" : "/priser/nysalg/<anlaegsid>/<salgskanal>/<boligtype>/<stikstatus>",
+            "method" : "GET",
+            "version" : "1"
+        },
+        {
             "label" : "Mindstepris",
             "uri" : "/mindstepris-beregning/<price-id>/<anlaegsid>/<boligtype>/<stikstatus>/<nysalg>",
             "method" : "GET",
@@ -143,7 +149,7 @@
             "version" : "1"
         },
         {
-            "label" : "All customers",
+            "label" : "All customers with AMS id",
             "uri" : "/amsid/<id>",
             "method" : "GET",
             "version" : "1"
@@ -153,42 +159,108 @@
             "uri" : "/<id>",
             "method" : "POST",
             "version" : "1",
-            "schema" : "update-customer"
+            "schema" : "kunde-update-customer"
         },
         {
             "label" : "Create customer",
             "uri" : "/",
             "method" : "POST",
             "version" : "1",
-            "schema" : "create-customer"
+            "schema" : "kunde-create-customer"
+        },
+        {
+            "label" : "Find best customer match",
+            "uri" : "/<amsid>/<fornavn>/<efternavn>",
+            "method" : "GET",
+            "version" : "1"
         }]
     },
     {
-        "name" : "Logistik",
+        "name" : "LOGISTIK",
         "context" : "/logistik",
         "resources" : [{
             "label" : "Find lokation",
             "uri" : "/lokation/<lokation>",
             "method" : "GET",
             "version" : "1"
+        },
+        {
+            "label" : "Find lokation",
+            "uri" : "/hardware/<serienummer>",
+            "method" : "GET",
+            "version" : "1"
+        },
+        {
+            "label" : "Opret lagerordre",
+            "uri" : "/lagerordre",
+            "method" : "POST",
+            "version" : "1",
+            "schema" : "logistik-create-lagerordre"
+        },
+        {
+            "label" : "varemodtagelse",
+            "uri" : "/varemodtagelse",
+            "method" : "POST",
+            "version" : "1",
+            "schema" : "logistik-create-varemodtagelse"
+        },
+        {
+            "label" : "Ombytning",
+            "uri" : "/ombytning",
+            "method" : "POST",
+            "version" : "1",
+            "schema" : "logistik-create-ombytning"
+        },
+        {
+            "label" : "Indlevering",
+            "uri" : "/indlevering",
+            "method" : "POST",
+            "version" : "1",
+            "schema" : "logistik-create-indlevering"
+        },
+        {
+            "label" : "Omregistrering",
+            "uri" : "/omregistrering",
+            "method" : "POST",
+            "version" : "1",
+            "schema" : "logistik-create-omregistrering"
         }]
     },
     {
         "name" : "ORDRE",
         "context" : "/order",
         "resources" : [{
-            "label" : "Find lokation",
-            "uri" : "/lokation/<lokation>",
+            "label" : "Get order by UUID",
+            "uri" : "/<uuid>",
             "method" : "GET",
             "version" : "1"
+        },
+        {
+            "label" : "Get order receipt by UUID",
+            "uri" : "/receipt/<uuid>",
+            "method" : "GET",
+            "version" : "1"        
+        },
+        {
+            "label" : "Post order",
+            "uri" : "/",
+            "method" : "POST",
+            "version" : "1",
+            "schema" : "post-order"        
         }]
     },
     {
         "name" : "PRODUKT",
         "context" : "/product",
         "resources" : [{
-            "label" : "Find lokation",
-            "uri" : "/lokation/<lokation>",
+            "label" : "Get products by product key(s)",
+            "uri" : "/<productkey>",
+            "method" : "GET",
+            "version" : "1"
+        },
+        {
+            "label" : "Get multiple product keys",
+            "uri" : "/<productkey1+productkey2>",
             "method" : "GET",
             "version" : "1"
         }]
@@ -197,10 +269,11 @@
         "name" : "PROVISIONING",
         "context" : "/product",
         "resources" : [{
-            "label" : "Find lokation",
-            "uri" : "/logistik/lokation/<lokation>",
-            "method" : "GET",
-            "version" : "1"
+            "label" : "Create a Provisioning event",
+            "uri" : "/provisioning/vas",
+            "method" : "POST",
+            "version" : "1",
+            "schema" : "provisioning-create-event"
         }]
     }]
 }

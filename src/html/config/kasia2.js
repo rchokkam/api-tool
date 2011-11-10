@@ -216,7 +216,7 @@
             "uri" : "/indlevering",
             "method" : "POST",
             "version" : "1",
-            "schema" : "logistik-create-Indlevering"
+            "schema" : "logistik-create-indlevering"
         },
         {
             "label" : "Omregistrering",
