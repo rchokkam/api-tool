@@ -14,11 +14,16 @@ dl {
 }
 #tblrequest { 
   padding: 4px;  
+  width: 100%;
 }
-#tblrequest {
+#tblrequestd { 
+  padding: 4px;  
   width: 100%;
 }
 #rbody {
+  width: 100%;
+}
+#rheaders {
   width: 100%;
 }
 

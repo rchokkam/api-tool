@@ -49,7 +49,7 @@ $(function() {
 											// generate request form dynamically
 											var ruri = $("#iurl").attr("value");
 											var tokens = ruri.split("/");
-
+											if(tokens.length>0){
 											var str_html = "<table id=\"tblrequest\" cellpadding=\"5\" cellspacing=\"5\"><tbody>";
 											for (i = 0; i < tokens.length; i++) {
 												var token = tokens[i];
@@ -70,20 +70,37 @@ $(function() {
 													str_html += "</td></tr>";
 												}
 											}
-
+											str_html += "</tbody></table>";																						
+											}
+															
+											str_html += "<table id=\"tblrequestd\" cellpadding=\"5\" cellspacing=\"5\"><tbody><tr><td width=\"100px\"> headers </td><td>";
+											str_html += "<textarea col=\"80\" rows=\"3\" id=\"rheaders\">";
+											str_html += "</textarea></td></tr>";
 											var rmethod=get_method(ruri);
-											if(rmethod!=null && (rmethod=="PUT" || rmethod=="POST")){
-												str_html += "<tr><td> data </td><td>";
+											if(rmethod!=null && (rmethod=="PUT" || rmethod=="POST")){												
+												str_html += "<tr><td width=\"100px\"> data </td><td>";
 												str_html += "<textarea col=\"80\" rows=\"25\" id=\"rbody\">";
 												str_html += "</textarea></td></tr>";
 											}
 											str_html += "</tbody></table>";
+											
 											$("div#request").html(str_html);
+											
+											if(tokens.length>0){
+												// handle enter key for request
+												$("#tblrequest").keypress(function(e) {
+													if(e.which == 13) {
+    													jQuery(this).blur();
+      											jQuery('input#sbutton').focus().click();
+    											}
+													$("input#pbutton").attr("disabled", true);
+												});
+											}
 
 											if(rmethod!=null && (rmethod=="PUT" || rmethod=="POST")){
 												set_schema(ruri);
 											}
-
+											
 											// view the request tab
 											$("#a-tab-1").trigger('click');
 											return false;
@@ -115,9 +132,10 @@ $(function() {
 					type: rmethod,
 					data: rdata,
 					beforeSend:function(jqXHR, settings){
+						$('body').css('cursor','wait');
 						jqXHR.setRequestHeader("Accept", "application/vnd.yousee.kasia2+json;charset=UTF-8");
     				jqXHR.setRequestHeader("Content-Type", "application/vnd.yousee.kasia2+json;charset=UTF-8");
-    				render_request_header(jqXHR);
+    				set_additional_headers(jqXHR);
 					},
 					success: function(data, textStatus, jqXHR){
 						if(rmethod=="GET"){
@@ -129,7 +147,7 @@ $(function() {
 						render_response_header(jqXHR,false);
 						// view the
 						if(data==undefined || data==null || data == ""){
-							$("#a-tab-4").trigger('click');
+							$("#a-tab-3").trigger('click');
 						}else{
 							$("#a-tab-2").trigger('click');
 						}	
@@ -144,9 +162,13 @@ $(function() {
 					},
 					error: function(jqXHR, textStatus, errorThrown){
 						render_response_header(jqXHR,true);
-						$("#a-tab-4").trigger('click');
+						$("#a-tab-3").trigger('click');
+					},
+					complete: function(jqXHR,textStatus){
+						$('body').css('cursor','auto');
 					}						
 				});
+				
 			});
 
 	// handle dummy button event
@@ -163,7 +185,7 @@ $(function() {
 				}
 
 				uri = uri.substring((uri.indexOf("}")) + 1);
-				$.getJSON(uri, function(data) {
+				$.getJSON(uri, function(data, textStatus, jqXHR) {
 					$("div#response").html(
 							"<pre id=\"rspre\">" + JSON.stringify(data, replacer, 4)
 									+ "</pre>");
@@ -171,9 +193,11 @@ $(function() {
 					  $("pre#rspre").height(650);
 				  }
 				  
+				  render_response_header(jqXHR,false);
+				  
 				  // view the
 					if(data==undefined || data==null || data == ""){
-						$("#a-tab-4").trigger('click');
+						$("#a-tab-3").trigger('click');
 					}else{
 						$("#a-tab-2").trigger('click');
 					}		
@@ -181,14 +205,7 @@ $(function() {
 	
 			});
 
-	// handle enter key for request
-	$("#request").keypress(function(e) {
-		if(e.which == 13) {
-    	jQuery(this).blur();
-      jQuery('input#sbutton').focus().click();
-    }
-		$("input#pbutton").attr("disabled", true);
-	});
+	
 
 	// handle onclick event for prev button
 	$("input#nbutton").click(function() {
@@ -223,6 +240,24 @@ $(function() {
 });
 
 /**
+ * This function set the additional headers
+ * expected header is key:value.
+ */
+var set_additional_headers=function(jqXHR){
+	var rheaders=$("textarea#rheaders").val();
+	if(rheaders){
+		var headers=rheaders.split('\n');
+		$.each(headers,function(i,header){		
+			if(header.indexOf(":")!=-1){
+				var key=header.substring(0,header.indexOf(":")),
+						value=header.substring(header.indexOf(":")+1);
+				jqXHR.setRequestHeader(key,value);
+			}
+		});	
+	}
+}
+
+/**
  * recursive function to replace the last slashes.
  */
 var replace_last_slash=function(ruri){
@@ -236,27 +271,25 @@ var replace_last_slash=function(ruri){
  */
 var clear_div_content=function(){
 	$("div#response").empty();
-	$("div#reqheader").empty();
 	$("div#resheader").empty();
-};
-/**
- * render request header.
- */
-var render_request_header=function(jqXHR){
-	var str = "<table style=\"width:100%\"><tbody>";
-	//str += "<tr><td>test</td><td>test</td></tr>";
-	str += "</tbody></table>";
-	$("div#reqheader").empty().html(str);
 };
 /**
  * render response header.
  */
 var render_response_header=function(jqXHR,error){
 	var str = "<table style=\"width:100%\" cellpadding=\"5\" cellspacing=\"5\"><tbody>";
+	$.each(jqXHR.getAllResponseHeaders().split('\n'),function(i,header){		
+		if(header.indexOf(":")!=-1){
+			var key=header.substring(0,header.indexOf(":")),
+					value=header.substring(header.indexOf(":")+1);
+			str += "<tr><td>" + key + "</td><td>" + value + "</td></tr>";
+		}
+	});
+	
 	str += "<tr><td width=\"120px\">Ready State</td><td>" + jqXHR.readyState + "</td></tr>";
-	//str += "<tr><td>Response Text</td><td>" + jqXHR.responseText + "</td></tr>";
 	str += "<tr><td>Status</td><td>" + jqXHR.status + "</td></tr>";
 	str += "<tr><td>Status Text</td><td>" + jqXHR.statusText + "</td></tr>";
+	
 	if(error){
 		str += "<tr><td>Response Text</td><td>" + jqXHR.responseText + "</td></tr>";
 	}
