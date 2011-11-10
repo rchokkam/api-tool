@@ -2,7 +2,7 @@
     "preandprod" : ["preprod","prod"],
     "accept" : "application/vnd.yousee.kasia2+json;charset=UTF-8",
     "modules" : [{
-        "name" : "Abonnementer",
+        "name" : "ABONNEMENT",
         "context" : "/abonnement",
         "resources" : [{
             "label" : "All abonnementer for a Customer",
@@ -36,7 +36,7 @@
         }]
     },
     {
-        "name" : "Address",
+        "name" : "ADRESSE",
         "context" : "/adresse",
         "resources" : [{
             "label" : "Find by zip",
@@ -176,7 +176,7 @@
         }]
     },
     {
-        "name" : "Logistik",
+        "name" : "LOGISTIK",
         "context" : "/logistik",
         "resources" : [{
             "label" : "Find lokation",
