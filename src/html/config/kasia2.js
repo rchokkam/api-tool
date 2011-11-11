@@ -4,6 +4,16 @@
     "modules" : [{
         "name" : "ABONNEMENT",
         "context" : "/abonnement",
+        "docs" : [{
+        	"label" : "API",
+        	"uri" : "/public/API.html",
+        	"version" : "1"
+        },
+        {
+        	"label" : "Release Notes",
+        	"uri" : "/public/release-notes.html",
+        	"version" : "1"
+        }],
         "resources" : [{
             "label" : "All abonnementer for a Customer",
             "uri" : "/kunde/<kundeid>",
@@ -38,6 +48,16 @@
     {
         "name" : "ADRESSE",
         "context" : "/adresse",
+        "docs" : [{
+        	"label" : "API",
+        	"uri" : "/public/API.html",
+        	"version" : "1"
+        },
+        {
+        	"label" : "Release Notes",
+        	"uri" : "/public/release-notes.html",
+        	"version" : "1"
+        }],
         "resources" : [{
             "label" : "Find by zip",
             "uri" : "/find/<zip>",
@@ -72,6 +92,16 @@
     {
         "name" : "AFS\u00c6TNING",
         "context" : "/afsaetning",
+        "docs" : [{
+        	"label" : "API",
+        	"uri" : "/public/API.html",
+        	"version" : "1"
+        },
+        {
+        	"label" : "Release Notes",
+        	"uri" : "/public/release-notes.html",
+        	"version" : "1"
+        }],
         "resources" : [{
             "label" : "Afsaetnings resource",
             "uri" : "/<amsid>/<instnr>/<salgskanal>/[kundeid]",
@@ -142,6 +172,21 @@
     {
         "name" : "KUNDE",
         "context" : "/kunde",
+        "docs" : [{
+        	"label" : "API",
+        	"uri" : "/public/API.html",
+        	"version" : "1"
+        },
+        {
+        	"label" : "SSO API",
+        	"uri" : "/public/SSO-API.html",
+        	"version" : "1"
+        },
+        {
+        	"label" : "Release Notes",
+        	"uri" : "/public/release-notes.html",
+        	"version" : "1"
+        }],
         "resources" : [{
             "label" : "Find customer",
             "uri" : "/<id>",
@@ -178,6 +223,16 @@
     {
         "name" : "LOGISTIK",
         "context" : "/logistik",
+        "docs" : [{
+        	"label" : "API",
+        	"uri" : "/public/API.html",
+        	"version" : "1"
+        },
+        {
+        	"label" : "Release Notes",
+        	"uri" : "/public/release-notes.html",
+        	"version" : "1"
+        }],
         "resources" : [{
             "label" : "Find lokation",
             "uri" : "/lokation/<lokation>",
@@ -229,6 +284,16 @@
     {
         "name" : "ORDRE",
         "context" : "/order",
+        "docs" : [{
+        	"label" : "API",
+        	"uri" : "/public/API.html",
+        	"version" : "1"
+        },
+        {
+        	"label" : "Release Notes",
+        	"uri" : "/public/release-notes.html",
+        	"version" : "1"
+        }],
         "resources" : [{
             "label" : "Get order by UUID",
             "uri" : "/<uuid>",
@@ -252,6 +317,16 @@
     {
         "name" : "PRODUKT",
         "context" : "/product",
+        "docs" : [{
+        	"label" : "API",
+        	"uri" : "/public/API.html",
+        	"version" : "1"
+        },
+        {
+        	"label" : "Release Notes",
+        	"uri" : "/public/release-notes.html",
+        	"version" : "1"
+        }],
         "resources" : [{
             "label" : "Get products by product key(s)",
             "uri" : "/<productkey>",
@@ -268,6 +343,16 @@
     {
         "name" : "PROVISIONING",
         "context" : "/product",
+        "docs" : [{
+        	"label" : "API",
+        	"uri" : "/public/API.html",
+        	"version" : "1"
+        },
+        {
+        	"label" : "Release Notes",
+        	"uri" : "/public/release-notes.html",
+        	"version" : "1"
+        }],
         "resources" : [{
             "label" : "Create a Provisioning event",
             "uri" : "/provisioning/vas",

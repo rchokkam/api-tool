@@ -41,3 +41,7 @@ textarea {
 .rdatatext {
 	width: 70%;
 }
+
+.content {
+	display: none;
+}

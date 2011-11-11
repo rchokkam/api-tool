@@ -21,6 +21,16 @@ $(function() {
 						$.each(data.modules, function(i, item) {
 							str += "<h3><a href=\"#\">" + item.name
 									+ "</a></h3><div><dt>";
+									
+							if(item.docs){							
+							$.each(item.docs, function(k, doc){
+								str += "<dl><a href=\""
+										+ generate_doc_uri(preandpost,item,doc)
+										+ "\" id=\"docuri\">"
+										+ doc.label + "</a></dl>";
+							});
+						 }
+									
 							$.each(item.resources, function(j, resource) {
 								str += "<dl><a href=\""
 										+ generate_uri(preandpost, item,
@@ -28,6 +38,7 @@ $(function() {
 										+ "\" id=\"resourceuri\">"
 										+ resource.label + "</a></dl>";
 							});
+							
 							str += "</dt></div>";
 						});
 						$("div#accordion").html(str);
@@ -37,11 +48,21 @@ $(function() {
 							autoHeight : false,
 							navigation : true
 						});
+						
+						// handle doc uri link click event
+						$("a#docuri").click(function(){
+							$("div#bcontent").hide();							
+							$("div#bodyContent").show();	
+							$("iframe#ibodyContent").attr("src",$(this).attr("href"));						
+							return false;
+						});
 
 						// handle resource uri link click event
 						$("a#resourceuri")
 								.click(
 										function() {
+											$("div#bodyContent").hide();
+											$("div#bcontent").show();
 											clear_div_content();
 											var aurl = $(this).attr("href");
 											$("#iurl").attr("value", aurl);
@@ -321,8 +342,23 @@ var generate_uri=function(preandprod, module, resource) {
 		ruri += "-v" + resource.version + resource.uri;
 	}
 	return ruri;
-}
-
+};
+/**
+ *
+ */ 
+var generate_doc_uri=function(preandprod, module, doc) {
+	var hosts = preandprod.toString();
+	var duri = module.context;
+	if (hosts.match(location.hostname) != null) { // preprod and production
+		duri += doc.uri;
+	} else { // other than preprod and production environment
+		duri += "-v" + doc.version + doc.uri;
+	}
+	return duri;
+};
+/**
+ *
+ */
 var set_schema=function(ruri){
 	$.getJSON("config/kasia2.js",function(data) {
 		var str = "";	
