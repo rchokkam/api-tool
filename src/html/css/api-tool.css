@@ -2,7 +2,7 @@ dl {
   padding-bottom: 2px; padding-top: 2px; 
 }
 textarea {
-	border: 2px inset;
+	border: 1px inset;
 	-webkit-rtl-ordering: logical;
 	-webkit-user-select: text;
 }
@@ -11,7 +11,7 @@ textarea {
   overflow: visible; 
 }
 #iurl { 
-  width:81%; 
+  width:570px; 
 }
 #http_method { 
   width: 80px; 

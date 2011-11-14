@@ -1,5 +1,5 @@
 {
-    "preandprod" : ["preprod","prod"],
+    "preandprod" : ["preprod-kasia","prod"],
     "accept" : "application/vnd.yousee.kasia2+json;charset=UTF-8",
     "modules" : [{
         "name" : "ABONNEMENT",

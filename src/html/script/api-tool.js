@@ -71,7 +71,7 @@ $(function() {
 											var ruri = $("#iurl").attr("value");
 											var tokens = ruri.split("/");
 											if(tokens.length>0){
-											var str_html = "<table id=\"tblrequest\" cellpadding=\"5\" cellspacing=\"5\"><tbody>";
+											var str_html = "<table id=\"tblrequest\" cellpadding=\"3\" cellspacing=\"3\"><tbody>";
 											for (i = 0; i < tokens.length; i++) {
 												var token = tokens[i];
 												if (token.length > 1 && 
@@ -94,7 +94,7 @@ $(function() {
 											str_html += "</tbody></table>";																						
 											}
 															
-											str_html += "<table id=\"tblrequestd\" cellpadding=\"5\" cellspacing=\"5\"><tbody><tr><td width=\"100px\"> headers </td><td>";
+											str_html += "<table id=\"tblrequestd\" cellpadding=\"3\" cellspacing=\"3\"><tbody><tr><td width=\"100px\"> headers </td><td>";
 											str_html += "<textarea col=\"80\" rows=\"2\" id=\"rheaders\">";
 											str_html += "</textarea></td></tr>";
 											var rmethod=get_method(ruri);
@@ -298,7 +298,7 @@ var clear_div_content=function(){
  * render response header.
  */
 var render_response_header=function(jqXHR,error){
-	var str = "<table style=\"width:100%\" cellpadding=\"5\" cellspacing=\"5\"><tbody>";
+	var str = "<table style=\"width:100%\" cellpadding=\"3\" cellspacing=\"3\"><tbody>";
 	$.each(jqXHR.getAllResponseHeaders().split('\n'),function(i,header){		
 		if(header.indexOf(":")!=-1){
 			var key=header.substring(0,header.indexOf(":")),
