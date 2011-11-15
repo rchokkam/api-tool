@@ -232,17 +232,17 @@ div.gettingStarted, div.devResources {
 #primaryContent p, #primaryContent li {
 	font-size: 12px;
 	/*font-size: 1.3em;*/
-	line-height: 1.4 !important;
-	margin: .5em 0 !important;
+	/*line-height: 1.4 !important;*/
+	/*margin: .5em 0 !important;*/
 }
 #primaryContent p {
 	margin: .5em 0 1.2em !important;
 }
 #interior #primaryContent p, #interior #primaryContent li {
-	font-size: 13px;
+	font-size: 12px;
 	/*font-size: 1.5em;*/
-	line-height: 1.5 !important;
-	font-weight: normal;
+	/*line-height: 1.5 !important;*/
+	/*font-weight: normal;*/
 }
 #primaryContent a, #primaryContent a:visited {
 	color: #0F67A1;
@@ -309,7 +309,7 @@ div.gettingStarted, div.devResources {
 
 
 ul li, ul.menu li, .item-list ul li, li.leaf {
-	background: none !important;
+	/*background: none !important;*/
 }
 .fieldset-wrapper .project-terms li {
 	font-size: 1.3em;

@@ -179,7 +179,9 @@ $(function() {
 						$("input#nbutton").empty();
 						if(lhistory.length>1){
 							$("input#pbutton").removeAttr("disabled");
-						}						
+						}
+
+						render_json_as_tree(data);
 					},
 					error: function(jqXHR, textStatus, errorThrown){
 						render_response_header(jqXHR,true);
@@ -215,6 +217,8 @@ $(function() {
 				  }
 				  
 				  render_response_header(jqXHR,false);
+
+				  render_json_as_tree(data);
 				  
 				  // view the
 					if(data==undefined || data==null || data == ""){
@@ -293,6 +297,7 @@ var replace_last_slash=function(ruri){
 var clear_div_content=function(){
 	$("div#response").empty();
 	$("div#resheader").empty();
+	$('div#jstreeview').empty();
 };
 /**
  * render response header.
@@ -427,4 +432,34 @@ var get_method=function(ruri){
 		return rmethod;
 	}	
 	return "GET";  
+};
+/**
+ * Recursive function to traverse the json object and convert into ul li format.
+ */
+var traverse = function(key, jsonObj) {
+    if( jsonObj!= null && typeof jsonObj == "object") {    	
+        $.each(jsonObj, function(k,v) {             
+            if( v != null && typeof v == "object" ){
+            	gstr += '<li class="closed"><span class="folder">' + k + '</span><ul>'	
+            	traverse(k, v); 
+            	gstr += '</ul></li>';
+            } else{
+            	gstr += '<li><span class="file">' + k + ' :=> ' + v + '</span>'	
+            }             
+        });        
+    }
+    else {
+        // jsonOb is a number or string
+        gstr += '<li><span class="file">' + key + ' :=> ' + jsonObj + '</span></li>';
+    }
+};
+/**
+ * Function to render the json tree.
+ */
+var render_json_as_tree=function(jsonObj){
+	gstr='';
+	var str = '<ul>';
+	traverse("",jsonObj);
+	str += gstr + '</ul>';
+	$('div#jstreeview').empty().html(str).treeview();	
 };

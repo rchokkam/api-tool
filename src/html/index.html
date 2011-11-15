@@ -9,6 +9,7 @@
 <script type="text/javascript">
 		var lhistory=[];
 		var cur=0;
+		var gstr='';
 	</script>
 <script type="text/javascript"
 	src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
@@ -25,8 +26,10 @@
 <link rel="stylesheet" href="css/tocLayout.css" type="text/css" />
 <link rel="stylesheet" href="css/api-tool.css" type="text/css" />
 
-<link rel="shortcut icon" href="http://static.jquery.com/favicon.ico"
-	type="image/x-icon" />
+<link rel="shortcut icon" href="http://static.jquery.com/favicon.ico" type="image/x-icon" />
+
+<link rel="stylesheet" href="http://jquery.bassistance.de/treeview/jquery.treeview.css" type="text/css" />
+<script type="text/javascript" src="http://jquery.bassistance.de/treeview/jquery.treeview.js"></script>
 </head>
 
 
@@ -72,6 +75,7 @@
 								<li><a id="a-tab-1" href="#tabs-1">Request</a></li>
 								<li><a id="a-tab-2" href="#tabs-2">Response</a></li>
 								<li><a id="a-tab-3" href="#tabs-3">Response Header</a></li>
+								<li><a id="a-tab-4" href="#tabs-4">Tree View</a></li>
 							</ul>
 							<div id="tabs-1">
 								<div id="request"></div>
@@ -81,6 +85,9 @@
 							</div>
 							<div id="tabs-3">
 								<div id="resheader"></div>
+							</div>
+							<div id="tabs-4">
+								<div id="jstreeview"></div>
 							</div>
 						</div>
 					</div>
