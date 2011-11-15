@@ -20,8 +20,6 @@
 <link type="text/css"
 	href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/themes/ui-lightness/jquery-ui.css"
 	rel="Stylesheet" />
-<link rel="stylesheet" href="css/jquery.treeview.css" type="text/css" />
-<script type="text/javascript" src="script/jquery.treeview.js"></script>
 
 <link rel="stylesheet" href="css/style.css" type="text/css" />
 <link rel="stylesheet" href="css/markdown.css" type="text/css" />
@@ -30,7 +28,8 @@
 
 <link rel="shortcut icon" href="http://static.jquery.com/favicon.ico" type="image/x-icon" />
 
-
+<link rel="stylesheet" href="http://jquery.bassistance.de/treeview/jquery.treeview.css" type="text/css" />
+<script type="text/javascript" src="http://jquery.bassistance.de/treeview/jquery.treeview.js"></script>
 </head>
 
 
