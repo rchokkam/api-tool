@@ -1,7 +1,7 @@
 {
 "category": "create",
 "author": "marked5",
-"title": "Marked5 40/4 bsa 01IP00000008tPW"
+"title": "Marked5 40/4 bsa 01IP00000008tPW",
 "content": {
     "provisioneringsid": "01IP00000008tPW",
     "provisioneringskode" : "1201504",
