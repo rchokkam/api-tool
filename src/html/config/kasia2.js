@@ -1,5 +1,5 @@
 {
-    "preandprod" : ["preprod-kasia","prod"],
+    "preandprod" : ["preprod-kasia.tdk.dk","kasia.tdk.dk","preprod-kasia.yousee.dk","kasia.yousee.dk","preprod-kasia","kasia"],
     "accept" : "application/vnd.yousee.kasia2+json;charset=UTF-8",
     "modules" : [{
         "name" : "ABONNEMENT",
@@ -215,7 +215,7 @@
         },
         {
             "label" : "Find best customer match",
-            "uri" : "/<amsid>/<fornavn>/<efternavn>",
+            "uri" : "/bedste-match/<amsid>/<fornavn>/<efternavn>",
             "method" : "GET",
             "version" : "1"
         }]
@@ -234,13 +234,13 @@
         	"version" : "1"
         }],
         "resources" : [{
-            "label" : "Find lokation",
+            "label" : "Find hardwares by lokation",
             "uri" : "/lokation/<lokation>",
             "method" : "GET",
             "version" : "1"
         },
         {
-            "label" : "Find lokation",
+            "label" : "Find hardware by serienummer",
             "uri" : "/hardware/<serienummer>",
             "method" : "GET",
             "version" : "1"
@@ -283,7 +283,7 @@
     },
     {
         "name" : "ORDRE",
-        "context" : "/order",
+        "context" : "/ordre",
         "docs" : [{
         	"label" : "API",
         	"uri" : "/public/API.html",
@@ -307,6 +307,18 @@
             "version" : "1"        
         },
         {
+            "label" : "Get order by kundeID",
+            "uri" : "/<kundeid>",
+            "method" : "GET",
+            "version" : "1"        
+        },
+        {
+            "label" : "Notifications (ATOM feed)",
+            "uri" : "/notifications",
+            "method" : "GET",
+            "version" : "1"        
+        },
+        {
             "label" : "Post order",
             "uri" : "/",
             "method" : "POST",
@@ -316,7 +328,7 @@
     },
     {
         "name" : "PRODUKT",
-        "context" : "/product",
+        "context" : "/produkt",
         "docs" : [{
         	"label" : "API",
         	"uri" : "/public/API.html",
@@ -328,7 +340,7 @@
         	"version" : "1"
         }],
         "resources" : [{
-            "label" : "Get products by product key(s)",
+            "label" : "Get products by product key",
             "uri" : "/<productkey>",
             "method" : "GET",
             "version" : "1"
@@ -342,7 +354,7 @@
     },
     {
         "name" : "PROVISIONING",
-        "context" : "/product",
+        "context" : "/provisioning",
         "docs" : [{
         	"label" : "API",
         	"uri" : "/public/API.html",
@@ -354,11 +366,43 @@
         	"version" : "1"
         }],
         "resources" : [{
-            "label" : "Create a Provisioning event",
-            "uri" : "/provisioning/vas",
+            "label" : "Create a TAYS Provisioning event",
+            "uri" : "/tays",
             "method" : "POST",
             "version" : "1",
-            "schema" : "provisioning-create-event"
+            "schema" : "provisioning-create-tays"
+        },
+        {
+            "label" : "Show atom feed for TAYS Provisioning Manager",
+            "uri" : "/tays",
+            "method" : "GET",
+            "version" : "1"
+        },
+        {
+            "label" : "Create a TAYS REPLY Provisioning event",
+            "uri" : "/tays/reply",
+            "method" : "POST",
+            "version" : "1",
+            "schema" : "provisioning-create-taysreply"
+        },
+        {
+            "label" : "Show atom feed for TAYS REPLY Provisioning Manager",
+            "uri" : "/tays/reply",
+            "method" : "GET",
+            "version" : "1"
+        },
+        {
+            "label" : "Create a VAS Provisioning event",
+            "uri" : "/vas",
+            "method" : "POST",
+            "version" : "1",
+            "schema" : "provisioning-create-vas"
+        },
+        {
+            "label" : "Show atom feed for Vas Provisioning Manager",
+            "uri" : "/vas",
+            "method" : "GET",
+            "version" : "1"
         }]
     }]
 }

@@ -162,9 +162,20 @@ $(function() {
 						if(rmethod=="GET"){
 							lhistory.push(uri);
 							cur = (lhistory.length) - 1;
+						}						
+
+						if($.isPlainObject(data)){						
+							$("div#response").empty().html("<pre id=\"rspre\">" + JSON.stringify(data, replacer, 4)
+									+ "</pre>");						
+							render_json_as_tree(data);
+						}else if($.isXMLDoc(data)){
+							$("div#response").empty().html("<pre id=\"rspre\"></pre>");
+							$("pre#rspre").text($(data).xml());
+						} else {
+							$("div#response").empty().html("<pre id=\"rspre\"></pre>");
+							$("pre#rspre").text(data);
 						}
-						$("div#response").empty().html("<pre id=\"rspre\">" + JSON.stringify(data, replacer, 4)
-									+ "</pre>");
+
 						render_response_header(jqXHR,false);
 						// view the
 						if(data==undefined || data==null || data == ""){
@@ -177,11 +188,10 @@ $(function() {
 						}
 						$("input#nbutton").attr("disabled", true);
 						$("input#nbutton").empty();
+
 						if(lhistory.length>1){
 							$("input#pbutton").removeAttr("disabled");
-						}
-
-						render_json_as_tree(data);
+						}						
 					},
 					error: function(jqXHR, textStatus, errorThrown){
 						render_response_header(jqXHR,true);
@@ -208,26 +218,51 @@ $(function() {
 				}
 
 				uri = uri.substring((uri.indexOf("}")) + 1);
-				$.getJSON(uri, function(data, textStatus, jqXHR) {
-					$("div#response").html(
-							"<pre id=\"rspre\">" + JSON.stringify(data, replacer, 4)
-									+ "</pre>");
-				  if(($("pre#rspre").height())>650){
-					  $("pre#rspre").height(650);
-				  }
-				  
-				  render_response_header(jqXHR,false);
 
-				  render_json_as_tree(data);
-				  
-				  // view the
-					if(data==undefined || data==null || data == ""){
+				$.ajax({
+					url: uri,
+					processData:false,
+					type: "GET",					
+					beforeSend:function(jqXHR, settings){
+						$('body').css('cursor','wait');
+						jqXHR.setRequestHeader("Accept", "application/vnd.yousee.kasia2+json;charset=UTF-8");
+    					jqXHR.setRequestHeader("Content-Type", "application/vnd.yousee.kasia2+json;charset=UTF-8");
+    					//set_additional_headers(jqXHR);
+					},
+					success: function(data, textStatus, jqXHR){
+						if($.isPlainObject(data)){		
+							$("div#response").html(
+								"<pre id=\"rspre\">" + JSON.stringify(data, replacer, 4)
+										+ "</pre>");				  		
+							render_json_as_tree(data);
+				  		} else if($.isXMLDoc(data)){
+							$("div#response").empty().html("<pre id=\"rspre\"></pre>");
+							$("pre#rspre").text($(data).xml());
+						} else {
+							$("div#response").empty().html("<pre id=\"rspre\"></pre>");
+							$("pre#rspre").text(data);
+						}
+										  
+				  		render_response_header(jqXHR,false);			 			
+								  
+				  		// view the
+						if(data==undefined || data==null || data == ""){
+							$("#a-tab-3").trigger('click');
+						}else{
+							$("#a-tab-2").trigger('click');
+						}	
+						if(($("pre#rspre").height())>650){
+					  		$("pre#rspre").height(650);
+				  		}	
+					},
+					error: function(jqXHR, textStatus, errorThrown){
+						render_response_header(jqXHR,true);
 						$("#a-tab-3").trigger('click');
-					}else{
-						$("#a-tab-2").trigger('click');
-					}		
+					},
+					complete: function(jqXHR,textStatus){
+						$('body').css('cursor','auto');
+					}						
 				});
-	
 			});
 
 	
