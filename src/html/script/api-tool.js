@@ -164,16 +164,13 @@ $(function() {
 							cur = (lhistory.length) - 1;
 						}						
 
-						if($.isPlainObject(data)){						
+						if($.isXMLDoc(data)){
+							$("div#response").empty().html("<pre id=\"rspre\"></pre>");
+							$("pre#rspre").text($(data).xml());
+						}else{						
 							$("div#response").empty().html("<pre id=\"rspre\">" + JSON.stringify(data, replacer, 4)
 									+ "</pre>");						
 							render_json_as_tree(data);
-						}else if($.isXMLDoc(data)){
-							$("div#response").empty().html("<pre id=\"rspre\"></pre>");
-							$("pre#rspre").text($(data).xml());
-						} else {
-							$("div#response").empty().html("<pre id=\"rspre\"></pre>");
-							$("pre#rspre").text(data);
 						}
 
 						render_response_header(jqXHR,false);
@@ -230,18 +227,15 @@ $(function() {
     					//set_additional_headers(jqXHR);
 					},
 					success: function(data, textStatus, jqXHR){
-						if($.isPlainObject(data)){		
+						if($.isXMLDoc(data)){
+							$("div#response").empty().html("<pre id=\"rspre\"></pre>");
+							$("pre#rspre").text($(data).xml());
+						}else{		
 							$("div#response").html(
 								"<pre id=\"rspre\">" + JSON.stringify(data, replacer, 4)
 										+ "</pre>");				  		
 							render_json_as_tree(data);
-				  		} else if($.isXMLDoc(data)){
-							$("div#response").empty().html("<pre id=\"rspre\"></pre>");
-							$("pre#rspre").text($(data).xml());
-						} else {
-							$("div#response").empty().html("<pre id=\"rspre\"></pre>");
-							$("pre#rspre").text(data);
-						}
+				  		}
 										  
 				  		render_response_header(jqXHR,false);			 			
 								  
