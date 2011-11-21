@@ -72,20 +72,28 @@ $(function() {
 											var tokens = ruri.split("/");
 											if(tokens.length>0){
 											var str_html = "<table id=\"tblrequest\" cellpadding=\"3\" cellspacing=\"3\"><tbody>";
+														//+ "<tr><td colspan=\"3\"><span style=\"color:red\">* indicates mandatory</span></td></tr>";
 											for (i = 0; i < tokens.length; i++) {
 												var token = tokens[i];
 												if (token.length > 1 && 
-														((token.charAt(0) == '<'
-														&& token
-																.charAt((token.length) - 1) == '>') ||
-														(token.charAt(0) == '['
-														&& token
-																.charAt((token.length) - 1) == ']'))) {
+														(token.charAt(0) == '<' && 
+															token.charAt((token.length) - 1) == '>')) {
 													token = token.substr(1,
 															token.length - 2);
 													str_html += "<tr><td width=\"100px\">";
 													str_html += token
-															+ "</td><td>";
+															+ "</td><td width=\"2px\"><span style=\"color: red\">*</span></td><td>";
+													str_html += "<input type=\"text\" class=\"rdatatext\" id=\""
+															+ token + "\"/>"
+													str_html += "</td></tr>";
+												} 
+												else if (token.length > 1 && 
+														(token.charAt(0) == '['
+															&& token.charAt((token.length) - 1) == ']')) {
+													token = token.substr(1,token.length - 2);
+													str_html += "<tr><td width=\"100px\">";
+													str_html += token
+															+ "</td><td width=\"6px\"><span>&nbsp;</span></td><td>";
 													str_html += "<input type=\"text\" class=\"rdatatext\" id=\""
 															+ token + "\"/>"
 													str_html += "</td></tr>";
@@ -94,12 +102,12 @@ $(function() {
 											str_html += "</tbody></table>";																						
 											}
 															
-											str_html += "<table id=\"tblrequestd\" cellpadding=\"3\" cellspacing=\"3\"><tbody><tr><td width=\"100px\"> headers </td><td>";
+											str_html += "<table id=\"tblrequestd\" cellpadding=\"3\" cellspacing=\"3\"><tbody><tr><td width=\"100px\"> headers </td><td width=\"6px\"><span>&nbsp;</span></td><td>";
 											str_html += "<textarea col=\"80\" rows=\"2\" id=\"rheaders\">";
 											str_html += "</textarea></td></tr>";
 											var rmethod=get_method(ruri);
 											if(rmethod!=null && (rmethod=="PUT" || rmethod=="POST")){												
-												str_html += "<tr><td width=\"100px\"> data </td><td>";
+												str_html += "<tr><td width=\"100px\"> data </td><td width=\"6px\"><span>&nbsp;</span></td><td>";
 												str_html += "<textarea col=\"80\" rows=\"25\" id=\"rbody\">";
 												str_html += "</textarea></td></tr>";
 											}
