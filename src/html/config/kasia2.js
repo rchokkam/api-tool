@@ -1,6 +1,15 @@
 {
     "preandprod" : ["preprod-kasia.tdk.dk","kasia.tdk.dk","preprod-kasia.yousee.dk","kasia.yousee.dk","preprod-kasia","kasia"],
     "accept" : "application/vnd.yousee.kasia2+json;charset=UTF-8",
+    "rel" : {
+        "opret" : "PUT",
+        "opdater" : "PUT",
+        "slet" : "PUT",
+        "opsig" : "PUT",
+        "vaelg-aftale" : "PUT",
+        "fjern-advarsler" : "PUT",
+        "bestil" : "POST"
+    },
     "modules" : [{
         "name" : "ABONNEMENT",
         "context" : "/abonnement",

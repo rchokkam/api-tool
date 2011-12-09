@@ -18,6 +18,10 @@ $(function() {
 					function(data) {
 						var str = "";
 						var preandpost = data.preandprod;
+
+						// Load the relational configuration map.
+						rel = data.rel;
+
 						$.each(data.modules, function(i, item) {
 							str += "<h3><a href=\"#\">" + item.name
 									+ "</a></h3><div><dt>";
@@ -451,10 +455,30 @@ var replacer=function(key, value) {
 	if (key != null && key == "href") {
 		var urlStart = location.protocol + "//" + location.host;
 		var avalue = value.replace(urlStart, "");
+		avalue = '{' + get_method_name_by_rel() + '}' + avalue;
 		return "<span class='nesturi' onclick='nested_call(this)'>" + avalue
 				+ "</span>";
 	}
+
+	if(key == 'rel'){
+		latest_rel = value;
+	}
 	return value;
+};
+/**
+ * This returns the method name based on the relation object default returns GET.
+ **/
+var get_method_name_by_rel=function(){
+	try{
+		var method_name = rel[latest_rel];
+		if(method_name == null || method_name != 'PUT' 
+			|| method_name != 'POST' || method_name != 'DELETE'){
+			return "GET";
+		}
+		return method_name;
+	}catch(err){
+		return "GET";
+	}
 };
 /**
  * 
