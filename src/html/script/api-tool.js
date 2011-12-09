@@ -155,6 +155,32 @@ $(function() {
 						rmethod=get_method(uri),
 						rdata=$.parseJSON(get_request_data());
 
+				if((rdata!=null && rdata!="") && (rmethod=='PUT' || rmethod=='POST')){
+					try{
+						rdata = $.parseJSON(rdata);
+						if(rdata!=null && rdata['stempel']){
+							if(rdata.stempel.sys){
+								rdata.stempel.sys='apitool';
+								console.log(rdata.stempel.sys);
+							}
+						}
+
+						if(rdata!=null && rdata['klient-system']){
+							rdata['klient-system']='apitool';
+							console.log(rdata['klient-system']);
+						}
+
+						rdata = JSON.stringify(rdata);
+						console.log(rdata);
+					}catch(err){
+						$('#derror').empty().html('<div id="dialog-modal" title="Error"><p>' + err +'</p></div>');	
+						$( "#dialog-modal" ).dialog({
+							height: 140,
+							modal: true});
+						return;
+					}
+				}
+
 				$.ajax({
 					url: turi,
 					processData:false,
