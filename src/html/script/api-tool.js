@@ -21,6 +21,7 @@ $(function() {
 
 						// Load the relational configuration map.
 						rel = data.rel;
+						accept_header = data.accept;
 
 						$.each(data.modules, function(i, item) {
 							str += "<h3><a href=\"#\">" + item.name
@@ -166,14 +167,12 @@ $(function() {
 						rdata = $.parseJSON(rdata);
 						if(rdata!=null && rdata['stempel']){
 							if(rdata.stempel.sys){
-								rdata.stempel.sys='apitool';
-								console.log(rdata.stempel.sys);
+								rdata.stempel.sys='apitool';							
 							}
 						}
 
 						if(rdata!=null && rdata['klient-system']){
-							rdata['klient-system']='apitool';
-							console.log(rdata['klient-system']);
+							rdata['klient-system']='apitool';							
 						}
 
 						rdata = JSON.stringify(rdata);
@@ -194,9 +193,9 @@ $(function() {
 					data: rdata,
 					beforeSend:function(jqXHR, settings){
 						$('body').css('cursor','wait');
-						jqXHR.setRequestHeader("Accept", "application/vnd.yousee.kasia2+json;charset=UTF-8");
-    				jqXHR.setRequestHeader("Content-Type", "application/vnd.yousee.kasia2+json;charset=UTF-8");
-    				set_additional_headers(jqXHR);
+						jqXHR.setRequestHeader("Accept", accept_header);
+    					jqXHR.setRequestHeader("Content-Type", accept_header);
+    					set_additional_headers(jqXHR);
 					},
 					success: function(data, textStatus, jqXHR){
 						latest_json={};
@@ -245,7 +244,7 @@ $(function() {
 
 	// handle dummy button event
 	$("input#dbutton").click(
-			function() {
+			function() {				
 				clear_div_content();
 				var uri = $("#iurl").val();
 				var tokens = get_ruri_tokens(uri), token = "";
@@ -264,8 +263,8 @@ $(function() {
 					type: "GET",					
 					beforeSend:function(jqXHR, settings){
 						$('body').css('cursor','wait');
-						jqXHR.setRequestHeader("Accept", "application/vnd.yousee.kasia2+json;charset=UTF-8");
-    					jqXHR.setRequestHeader("Content-Type", "application/vnd.yousee.kasia2+json;charset=UTF-8");
+						jqXHR.setRequestHeader("Accept", accept_header);
+    					jqXHR.setRequestHeader("Content-Type", accept_header);
     					//set_additional_headers(jqXHR);
 					},
 					success: function(data, textStatus, jqXHR){
@@ -273,6 +272,7 @@ $(function() {
 							$("div#response").empty().html("<pre id=\"rspre\"></pre>");
 							$("pre#rspre").text($(data).xml());
 						}else{		
+							latest_json=data;
 							$("div#response").html(
 								"<pre id=\"rspre\">" + JSON.stringify(data, replacer, 4)
 										+ "</pre>");				  		
@@ -305,6 +305,7 @@ $(function() {
 
 	// handle onclick event for prev button
 	$("input#nbutton").click(function() {
+		$("div#request").empty();
 		if (lhistory.length > 0 && cur < (lhistory.length) - 1) {
 			cur += 1;
 			$("#iurl").attr("value", lhistory[cur]);
@@ -320,6 +321,7 @@ $(function() {
 
 	// handle onclick event for next button
 	$("input#pbutton").click(function() {
+		$("div#request").empty();
 		if (cur > 0) {
 			cur -= 1;
 			$("#iurl").attr("value", lhistory[cur]);
@@ -429,11 +431,11 @@ var generate_uri=function(preandprod, module, resource) {
 var generate_doc_uri=function(preandprod, module, doc) {
 	var hosts = preandprod.toString();
 	var duri = module.context;
-	if (hosts.match(location.hostname) != null) { // preprod and production
-		duri += doc.uri;
-	} else { // other than preprod and production environment
-		duri += "-v" + doc.version + doc.uri;
-	}
+	//if (hosts.match(location.hostname) != null) { // preprod and production
+	//	duri += doc.uri;
+	//} else { // other than preprod and production environment
+	duri += "-v" + doc.version + doc.uri;
+	//}
 	return duri;
 };
 /**
@@ -479,8 +481,9 @@ var replacer=function(key, value) {
 var get_method_name_by_rel=function(){
 	try{
 		var method_name = rel[latest_rel];
-		if(method_name == null || method_name == 'PUT' 
-			|| method_name == 'POST' || method_name == 'DELETE'){
+		if(method_name == 'PUT' ||
+		 method_name == 'POST' || 
+		 method_name == 'DELETE'){
 			return '${' + latest_rel + '}{' + method_name + '}';
 		}
 		return "{GET}";		
@@ -498,6 +501,7 @@ var simple_replacer=function(key, value) {
  * 
  */
 var nested_call=function(rspan) {
+	$("div#request").empty();
 	s_header=[];
 	s_data=[];
 	var ruri=$(rspan).text();
@@ -520,7 +524,7 @@ var nested_call=function(rspan) {
  **/
 var prepare_header_and_data=function(rel){
 	if(etag_value!=''){
-		s_header.push('ETag:' + etag_value);
+		s_header.push('If-Match:' + etag_value);
 	}
 
 	if(rel=='opret' ||
@@ -570,7 +574,7 @@ var populate_header_and_data=function(){
 
 	if(s_data.length!=0){
 		$.each(s_data, function(k,v){
-			$("textarea#rbody").attr("value",JSON.stringify(v));
+			$("textarea#rbody").attr("value",JSON.stringify(v,simple_replacer,2));
 		});	
 	}
 	s_header=[];
