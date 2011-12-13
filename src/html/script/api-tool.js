@@ -209,9 +209,11 @@ $(function() {
 							$("pre#rspre").text($(data).xml());
 						}else{						
 							latest_json=data;
-							$("div#response").empty().html("<pre id=\"rspre\">" + JSON.stringify(data, replacer, 4)
-									+ "</pre>");						
-							render_json_as_tree(data);
+							$("div#response").empty().html('<img id="popup" src="images/icon.jpg"/><pre id="rspre">' + JSON.stringify(data, replacer, 4)
+									+ '</pre>');
+
+							popup_image_click();
+							render_json_as_tree(data);						
 						}
 
 						render_response_header(jqXHR,false);
@@ -274,8 +276,9 @@ $(function() {
 						}else{		
 							latest_json=data;
 							$("div#response").html(
-								"<pre id=\"rspre\">" + JSON.stringify(data, replacer, 4)
-										+ "</pre>");				  		
+								'<img id="popup" src="images/icon.jpg"/><pre id="rspre">' + JSON.stringify(data, replacer, 4)
+										+ '</pre>');
+							popup_image_click();			  		
 							render_json_as_tree(data);
 				  		}
 										  
@@ -337,6 +340,21 @@ $(function() {
 
 });
 
+/**
+ *
+ **/
+var popup_image_click=function(){
+	$("img#popup").click(function(){
+		var wid = $(window).width();
+		var hei = $(window).height();
+		var popwid = 800;
+		var pophei = 600;
+		var left_pos = (wid-popwid)/2;
+		var top_pos = (hei-pophei)/2;
+		var popup_window=window.open('','API Tool Popup','width='+popwid+',height='+pophei+',top='+top_pos+',left='+left_pos+',location=0');
+		popup_window.document.write('<pre>' + JSON.stringify(latest_json, simple_replacer, 2) + '</pre>');
+	});
+};
 /**
  * This function set the additional headers
  * expected header is key:value.
