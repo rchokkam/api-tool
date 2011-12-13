@@ -133,6 +133,8 @@ $(function() {
 											if(rmethod!=null && (rmethod=="PUT" || rmethod=="POST")){
 												set_schema(ruri);
 											}
+
+											populate_header_and_data();
 											
 											// view the request tab
 											$("#a-tab-1").trigger('click');
@@ -197,6 +199,7 @@ $(function() {
     				set_additional_headers(jqXHR);
 					},
 					success: function(data, textStatus, jqXHR){
+						latest_json={};
 						if(rmethod=="GET"){
 							lhistory.push(uri);
 							cur = (lhistory.length) - 1;
@@ -206,6 +209,7 @@ $(function() {
 							$("div#response").empty().html("<pre id=\"rspre\"></pre>");
 							$("pre#rspre").text($(data).xml());
 						}else{						
+							latest_json=data;
 							$("div#response").empty().html("<pre id=\"rspre\">" + JSON.stringify(data, replacer, 4)
 									+ "</pre>");						
 							render_json_as_tree(data);
@@ -376,6 +380,10 @@ var render_response_header=function(jqXHR,error){
 			var key=header.substring(0,header.indexOf(":")),
 					value=header.substring(header.indexOf(":")+1);
 			str += "<tr><td>" + key + "</td><td>" + value + "</td></tr>";
+
+			if(key=='ETag' || key=='etag'){
+				etag_value = value;
+			}
 		}
 	});
 	
@@ -455,7 +463,7 @@ var replacer=function(key, value) {
 	if (key != null && key == "href") {
 		var urlStart = location.protocol + "//" + location.host;
 		var avalue = value.replace(urlStart, "");
-		avalue = '{' + get_method_name_by_rel() + '}' + avalue;
+		avalue = get_method_name_by_rel() + avalue;
 		return "<span class='nesturi' onclick='nested_call(this)'>" + avalue
 				+ "</span>";
 	}
@@ -471,13 +479,13 @@ var replacer=function(key, value) {
 var get_method_name_by_rel=function(){
 	try{
 		var method_name = rel[latest_rel];
-		if(method_name == null || method_name != 'PUT' 
-			|| method_name != 'POST' || method_name != 'DELETE'){
-			return "GET";
+		if(method_name == null || method_name == 'PUT' 
+			|| method_name == 'POST' || method_name == 'DELETE'){
+			return '${' + latest_rel + '}{' + method_name + '}';
 		}
-		return method_name;
+		return "{GET}";		
 	}catch(err){
-		return "GET";
+		return "{GET}";
 	}
 };
 /**
@@ -490,9 +498,84 @@ var simple_replacer=function(key, value) {
  * 
  */
 var nested_call=function(rspan) {
-	$("#iurl").attr("value", $(rspan).text());
-	$("input#sbutton").trigger('click');
+	s_header=[];
+	s_data=[];
+	var ruri=$(rspan).text();
+	/* if relation found then handle it specialy */
+	if(ruri.search(/[$][{][a-z]*[}]/i)!=-1){
+		var matchStr = ruri.match(/[$][{][a-z]*[}]/i);		
+		var rel = matchStr[0].replace('${','').replace('}','');		
+		ruri = ruri.replace(matchStr[0],'');
+		prepare_header_and_data(rel);
+		$("#dresourceuri > #resourceuri").attr("href",ruri);		
+		$('#dresourceuri > #resourceuri').trigger('click');
+	}else{
+		/* Default execution */
+		$("#iurl").attr("value", ruri);
+		$("input#sbutton").trigger('click');
+	}
 };
+/**
+ *
+ **/
+var prepare_header_and_data=function(rel){
+	if(etag_value!=''){
+		s_header.push('ETag:' + etag_value);
+	}
+
+	if(rel=='opret' ||
+        rel=='opdater' ||
+        rel=='slet' ||
+        rel=='opsig' ||
+        rel=='vaelg-aftale' ||
+        rel=='fjern-advarsler'){
+        try{
+	       	var kunde_data='';
+	       	var array_init='';
+	       	if(latest_json['kunde-data']){
+	       		kunde_data=latest_json['kunde-data'];
+	       	}
+	       	if(latest_json['array-init']){
+	       		array_init=latest_json['array-init'];
+	       	}
+	       	s_data.push({'kunde-data':kunde_data,'array-init':array_init});
+        }catch(err){
+        	s_data.push({});
+        }
+	} else if(rel=='bestil'){
+		try{
+	       	var kunde_data='';
+	       	var bestil_info='';
+	       	if(latest_json['kunde-data']){
+	       		kunde_data=latest_json['kunde-data'];
+	       	}
+	       	if(latest_json['bestil-info']){
+	       		bestil_info=latest_json['bestil-info'];
+	       	}
+	       	s_data.push({'kunde-data':kunde_data,'bestil-info':bestil_info});
+        }catch(err){
+        	s_data.push({});
+        }
+	}
+};  
+/**
+ *
+ **/
+var populate_header_and_data=function(){
+	if(s_header.length!=0){
+		$.each(s_header, function(k,v){
+			$("textarea#rheaders").attr('value',v);
+		});		
+	}
+
+	if(s_data.length!=0){
+		$.each(s_data, function(k,v){
+			$("textarea#rbody").attr("value",JSON.stringify(v));
+		});	
+	}
+	s_header=[];
+	s_data=[];
+} 
 /**
  * This function returns token by parsing the uri based on <token> pattern.
  */

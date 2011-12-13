@@ -8,7 +8,8 @@
         "opsig" : "PUT",
         "vaelg-aftale" : "PUT",
         "fjern-advarsler" : "PUT",
-        "bestil" : "POST"
+        "bestil" : "POST",
+        "vej" : "PUT"
     },
     "modules" : [{
         "name" : "ABONNEMENT",
