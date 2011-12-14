@@ -351,7 +351,7 @@ var popup_image_click=function(){
 		var pophei = 600;
 		var left_pos = (wid-popwid)/2;
 		var top_pos = (hei-pophei)/2;
-		var popup_window=window.open('','API Tool Popup','width='+popwid+',height='+pophei+',top='+top_pos+',left='+left_pos+',location=0');
+		var popup_window=window.open('','API Tool Popup','width='+popwid+',height='+pophei+',top='+top_pos+',left='+left_pos+',location=0,scrollbars=yes');
 		popup_window.document.write('<pre>' + JSON.stringify(latest_json, simple_replacer, 2) + '</pre>');
 	});
 };
