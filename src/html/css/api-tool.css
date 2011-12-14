@@ -30,7 +30,9 @@ textarea {
 #rheaders {
   width: 100%;
 }
-
+#popup {
+  cursor: pointer;
+}
 
 .nesturi {
 	text-decoration: underline;
