@@ -8,8 +8,8 @@ $(function() {
 	});
 
 	//Both buttons are disable at the of loading the page
-	$("input#nbutton").attr("disabled", true);
-	$("input#pbutton").attr("disabled", true);
+	$("#nbutton").attr("disabled", true);
+	$("#pbutton").attr("disabled", true);
 
 	// generate accordian element dynamically
 	$
@@ -125,9 +125,9 @@ $(function() {
 												$("#tblrequest").keypress(function(e) {
 													if(e.which == 13) {
     													jQuery(this).blur();
-      											jQuery('input#sbutton').focus().click();
+      											jQuery('#sbutton').focus().click();
     											}
-													$("input#pbutton").attr("disabled", true);
+													$("#pbutton").attr("disabled", true);
 												});
 											}
 
@@ -144,7 +144,7 @@ $(function() {
 					});
 					
 	// handle onclick event on sbutton
-	$("input#sbutton").click(
+	$("#sbutton").click(
 			function() {
 				clear_div_content();
 				var uri = $("#iurl").val();
@@ -226,11 +226,10 @@ $(function() {
 						if(($("pre#rspre").height())>650){
 							$("pre#rspre").height(650);
 						}
-						$("input#nbutton").attr("disabled", true);
-						$("input#nbutton").empty();
+						$("#nbutton").attr("disabled", true);						
 
 						if(lhistory.length>1){
-							$("input#pbutton").removeAttr("disabled");
+							$("#pbutton").removeAttr("disabled");
 						}						
 					},
 					error: function(jqXHR, textStatus, errorThrown){
@@ -245,7 +244,7 @@ $(function() {
 			});
 
 	// handle dummy button event
-	$("input#dbutton").click(
+	$("#dbutton").click(
 			function() {				
 				clear_div_content();
 				var uri = $("#iurl").val();
@@ -307,34 +306,34 @@ $(function() {
 	
 
 	// handle onclick event for prev button
-	$("input#nbutton").click(function() {
+	$("#nbutton").click(function() {
 		$("div#request").empty();
 		if (lhistory.length > 0 && cur < (lhistory.length) - 1) {
 			cur += 1;
 			$("#iurl").attr("value", lhistory[cur]);
-			$("input#dbutton").trigger('click');
-			$("input#pbutton").removeAttr("disabled");
+			$("#dbutton").trigger('click');
+			$("#pbutton").removeAttr("disabled");
 				if(cur == (lhistory.length) - 1) {
-					$("input#nbutton").attr("disabled", true);
+					$("#nbutton").attr("disabled", true);
 				}
 		} else {
-			$("input#nbutton").attr("disabled", true);
+			$("#nbutton").attr("disabled", true);
 		}
 	});
 
 	// handle onclick event for next button
-	$("input#pbutton").click(function() {
+	$("#pbutton").click(function() {
 		$("div#request").empty();
 		if (cur > 0) {
 			cur -= 1;
 			$("#iurl").attr("value", lhistory[cur]);
-			$("input#dbutton").trigger('click');
-			$("input#nbutton").removeAttr("disabled");
+			$("#dbutton").trigger('click');
+			$("#nbutton").removeAttr("disabled");
 				if(cur == 0) {
-					$("input#pbutton").attr("disabled", true);
+					$("#pbutton").attr("disabled", true);
 				}
 		} else {
-			$("input#pbutton").attr("disabled", true);
+			$("#pbutton").attr("disabled", true);
 		}
 	});
 
@@ -534,7 +533,7 @@ var nested_call=function(rspan) {
 	}else{
 		/* Default execution */
 		$("#iurl").attr("value", ruri);
-		$("input#sbutton").trigger('click');
+		$("#sbutton").trigger('click');
 	}
 };
 /**

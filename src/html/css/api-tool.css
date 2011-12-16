@@ -11,7 +11,7 @@ textarea {
   overflow: visible; 
 }
 #iurl { 
-  width:570px; 
+  width:540px; 
 }
 #http_method { 
   width: 80px; 
@@ -33,6 +33,10 @@ textarea {
 #popup {
   cursor: pointer;
 }
+#toolbar {
+  padding: 5px;
+}
+
 
 .nesturi {
 	text-decoration: underline;
