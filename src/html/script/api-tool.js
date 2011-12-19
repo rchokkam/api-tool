@@ -8,10 +8,9 @@ $(function() {
 	});
 
 	//Both buttons are disable at the of loading the page
-	$("#nbutton").attr("disabled", true);
-	$("#pbutton").attr("disabled", true);
-
-	$("button").button();
+	$("#sbutton").button();	
+	$("#nbutton").button({ disabled: true });
+	$("#pbutton").button({ disabled: true });
 
 	// generate accordian element dynamically
 	$
@@ -129,7 +128,7 @@ $(function() {
     													jQuery(this).blur();
       											jQuery('#sbutton').focus().click();
     											}
-													$("#pbutton").attr("disabled", true);
+												$("#pbutton").button({ disabled: true });													
 												});
 											}
 
@@ -228,10 +227,10 @@ $(function() {
 						if(($("pre#rspre").height())>650){
 							$("pre#rspre").height(650);
 						}
-						$("#nbutton").attr("disabled", true);						
+						$("#nbutton").button({ disabled: true });
 
 						if(lhistory.length>1){
-							$("#pbutton").removeAttr("disabled");
+							$("#pbutton").button({ disabled: false });
 						}						
 					},
 					error: function(jqXHR, textStatus, errorThrown){
@@ -314,12 +313,12 @@ $(function() {
 			cur += 1;
 			$("#iurl").attr("value", lhistory[cur]);
 			$("#dbutton").trigger('click');
-			$("#pbutton").removeAttr("disabled");
-				if(cur == (lhistory.length) - 1) {
-					$("#nbutton").attr("disabled", true);
-				}
+			$("#pbutton").button({ disabled: false });			
+			if(cur == (lhistory.length) - 1) {
+				$("#nbutton").button({ disabled: true });				
+			}
 		} else {
-			$("#nbutton").attr("disabled", true);
+			$("#nbutton").button({ disabled: true });
 		}
 	});
 
@@ -329,13 +328,13 @@ $(function() {
 		if (cur > 0) {
 			cur -= 1;
 			$("#iurl").attr("value", lhistory[cur]);
-			$("#dbutton").trigger('click');
-			$("#nbutton").removeAttr("disabled");
-				if(cur == 0) {
-					$("#pbutton").attr("disabled", true);
-				}
+			$("#dbutton").trigger('click');			
+			$("#nbutton").button({ disabled: false });
+			if(cur == 0) {
+				$("#pbutton").button({ disabled: true });				
+			}
 		} else {
-			$("#pbutton").attr("disabled", true);
+			$("#pbutton").button({ disabled: true });
 		}
 	});
 
