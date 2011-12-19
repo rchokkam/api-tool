@@ -37,7 +37,6 @@ textarea {
   padding: 5px;
 }
 
-
 .nesturi {
 	text-decoration: underline;
 	color: blue;
@@ -54,4 +53,8 @@ textarea {
 
 .treeview ul {
   background: #F5F4EE !important;
+}
+
+.ui-button-text-only .ui-button-text {
+  padding: .1em;  
 }

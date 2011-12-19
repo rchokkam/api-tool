@@ -11,6 +11,8 @@ $(function() {
 	$("#nbutton").attr("disabled", true);
 	$("#pbutton").attr("disabled", true);
 
+	$("button").button();
+
 	// generate accordian element dynamically
 	$
 			.getJSON(
